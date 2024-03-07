@@ -5,6 +5,13 @@ class Point {
     this.radius = radius;
     this.color = color;
   }
+
+  draw(ctx) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
 }
 
 const canvas = document.querySelector("canvas");
@@ -19,6 +26,8 @@ const pointA = new Point(100, 100, 10, "red");
 const pointB = new Point(200, 200, 10, "blue");
 const pointC = new Point(800, 400);
 
+pointC.draw(ctx);
+
 ctx.beginPath();
 ctx.arc(pointA.x, pointA.y, pointA.radius, 0, Math.PI * 2);
 ctx.fillStyle = pointA.color;
@@ -27,9 +36,4 @@ ctx.fill();
 ctx.beginPath();
 ctx.arc(pointB.x, pointB.y, pointB.radius, 0, Math.PI * 2);
 ctx.fillStyle = pointB.color;
-ctx.fill();
-
-ctx.beginPath();
-ctx.arc(pointC.x, pointC.y, pointC.radius, 0, Math.PI * 2);
-ctx.fillStyle = pointC.color;
 ctx.fill();

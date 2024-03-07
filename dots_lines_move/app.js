@@ -3,6 +3,12 @@ class Vector {
     this.x = x;
     this.y = y;
   }
+
+  getDistance(v) {
+    const dx = this.x - v.x;
+    const dy = this.y - v.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
 }
 
 class Point {
@@ -16,6 +22,15 @@ class Point {
   update() {
     this.pos.x += this.vel.x;
     this.pos.y += this.vel.y;
+  }
+
+  bounce(width, height) {
+    if (this.pos.x < 0 || this.pos.x > width) {
+      this.vel.x = -this.vel.x;
+    }
+    if (this.pos.y < 0 || this.pos.y > height) {
+      this.vel.y = -this.vel.y;
+    }
   }
 
   draw(ctx) {
@@ -64,20 +79,34 @@ ctx.arc(pointB.x, pointB.y, pointB.radius, 0, Math.PI * 2);
 ctx.fillStyle = pointB.color;
 ctx.fill();
 
-// Dibuja los puntos en el canvas
-// for (let point of points) {
-//   point.draw(ctx);
-// }
-
 function draw() {
   // Limpia el canvas
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  for (let i = 0; i < points.length; i++) {
+    const point = points[i];
+
+    for (let j = i + 1; j < points.length; j++) {
+      const other = points[j];
+      const distance = point.pos.getDistance(other.pos);
+      if (distance < 200) {
+        ctx.beginPath();
+        ctx.lineWidth = randomRange(0.1, 0.9);
+        ctx.moveTo(point.pos.x, point.pos.y);
+        ctx.lineTo(other.pos.x, other.pos.y);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 1 - distance / 100;
+        ctx.stroke();
+      }
+    }
+  }
+
   // Actualiza y dibuja tus puntos
   points.forEach((point) => {
     point.update();
     point.draw(ctx);
+    point.bounce(canvas.width, canvas.height);
   });
 
   // Solicita el próximo cuadro de la animación
